@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>About Rango</title>
+</head>
+<body>
+<p>{{ message }}</p>
+<img src="{{ MEDIA_URL }}cat.jpg" alt="The rango pic">
+<p>Here is the <a href="{% url 'index' %}">link</a> to main page</p>
+</body>
+</html>
