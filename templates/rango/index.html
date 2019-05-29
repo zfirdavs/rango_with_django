@@ -5,6 +5,11 @@
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
 {% endblock %}
 {% block content %}
+    {% if user.is_authenticated %}
+        howdy, {{ user.username }}!
+    {% else %}
+        hey there partner!
+    {% endif %}
     <h3>Most likes categories</h3>
     <ul>
         {% for category in categories %}
