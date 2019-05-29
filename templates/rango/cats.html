@@ -1,0 +1,17 @@
+<h3>All Categories</h3>
+<ul>
+    {% if cats %}
+        {% for c in cats %}
+            {% url 'show_category' c.slug as url %}
+            {% ifequal c act_cat %}
+                <li><strong>
+                    <a href="{{ url }}">{{ c.name }}</a>
+                </strong></li>
+            {% else %}
+                <li><a href="{{ url }}">{{ c.name }}</a></li>
+            {% endifequal %}
+        {% endfor %}
+    {% else %}
+        <li><strong>There are no categories present.</strong></li>
+    {% endif %}
+</ul>
