@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from .models import Category, Page
 from .forms import CategoryForm, PageForm, UserForm, UserProfileForm
 from datetime import datetime
+from registration.backends.simple.views import RegistrationView
 
 
 def index(request):
@@ -70,66 +71,66 @@ def about(request):
     return render(request, 'rango/about.html', context)
 
 
-def register(request):
-    registered = False
-
-    if request.method == 'POST':
-        user_form = UserForm(request.POST)
-        profile_form = UserProfileForm(request.POST)
-
-        if user_form.is_valid() and profile_form.is_valid():
-            user = user_form.save()
-
-            # Now we hash the password with the set_password method.
-            # Once hashed, we can update the user object.
-            user.set_password(user.password)
-            user.save()
-
-            profile = profile_form.save(commit=False)
-            profile.user = user
-
-            if 'picture' in request.FILES:
-                profile.picture = user_form.cleaned_data.get('picture')
-
-            profile.save()
-            registered = True
-        else:
-            print(user_form.errors, profile_form.errors)
-    else:
-        user_form = UserForm()
-        profile_form = UserProfileForm()
-
-    return render(request, 'rango/register.html', {
-        'user_form': user_form,
-        'profile_form': profile_form,
-        'registered': registered
-    })
-
-
-def user_login(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        user = authenticate(username=username, password=password)
-
-        if user:
-            if user.is_active:
-                login(request, user)
-                return redirect(reverse('index'))
-            else:
-                return redirect('Your Rango account is disabled.')
-        else:
-            print(f'Invalid login details: {username}, {password}')
-            return redirect('Invalid login details supplied.')
-    else:
-        return render(request, 'rango/login.html')
+# def register(request):
+#     registered = False
+#
+#     if request.method == 'POST':
+#         user_form = UserForm(request.POST)
+#         profile_form = UserProfileForm(request.POST)
+#
+#         if user_form.is_valid() and profile_form.is_valid():
+#             user = user_form.save()
+#
+#             # Now we hash the password with the set_password method.
+#             # Once hashed, we can update the user object.
+#             user.set_password(user.password)
+#             user.save()
+#
+#             profile = profile_form.save(commit=False)
+#             profile.user = user
+#
+#             if 'picture' in request.FILES:
+#                 profile.picture = user_form.cleaned_data.get('picture')
+#
+#             profile.save()
+#             registered = True
+#         else:
+#             print(user_form.errors, profile_form.errors)
+#     else:
+#         user_form = UserForm()
+#         profile_form = UserProfileForm()
+#
+#     return render(request, 'rango/register.html', {
+#         'user_form': user_form,
+#         'profile_form': profile_form,
+#         'registered': registered
+#     })
 
 
-@login_required
-def user_logout(request):
-    logout(request)
-    return redirect(reverse('index'))
+# def user_login(request):
+#     if request.method == 'POST':
+#         username = request.POST.get('username')
+#         password = request.POST.get('password')
+#
+#         user = authenticate(username=username, password=password)
+#
+#         if user:
+#             if user.is_active:
+#                 login(request, user)
+#                 return redirect(reverse('index'))
+#             else:
+#                 return redirect('Your Rango account is disabled.')
+#         else:
+#             print(f'Invalid login details: {username}, {password}')
+#             return redirect('Invalid login details supplied.')
+#     else:
+#         return render(request, 'rango/login.html')
+
+
+# @login_required
+# def user_logout(request):
+#     logout(request)
+#     return redirect(reverse('index'))
 
 
 @login_required
@@ -164,3 +165,10 @@ def get_server_side_cookie(request, cookie, default_val=None):
     if not val:
         val = default_val
     return val
+
+
+# Create a new class that redirects the user to the index page,
+# if successful at logging
+class MyRegistrationView(RegistrationView):
+    def get_success_url(self, user):
+        return reverse('index')
