@@ -1,35 +1,44 @@
-{% extends 'base.html' %}
+{% extends 'rango/base.html' %}
 {% load static %}
-{% block title %}Main Page{% endblock %}
+{% block title %}Index{% endblock %}
 {% block additional_css %}
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
 {% endblock %}
 {% block content %}
-    {% if user.is_authenticated %}
-        howdy, {{ user.username }}!
-    {% else %}
-        hey there partner!
-    {% endif %}
-    <h3>Most likes categories</h3>
-    <ul>
-        {% for category in categories %}
-            <li><a href="{% url 'show_category' category.slug %}">
-                {{ category.name }}</a>: {{ category.likes }}
-            </li>
-        {% empty %}
-            <strong>There are no categories present.</strong>
-        {% endfor %}
-    </ul>
-    <h3>Most viewed pages</h3>
-    <ul>
-        {% for viewed in most_viewed %}
-            <li><a href="{% url 'show_category' viewed.category.slug %}">
-                {{ viewed.category.name }}</a>: {{ viewed.title }} - {{ viewed.views }}
-            </li>
-        {% empty %}
-            <strong>There are no viewed pages present.</strong>
-        {% endfor %}
-    </ul>
+    <div class="jumbotron">
+        <h1 class="display-3">Rango says...</h1>
+        {% if user.is_authenticated %}
+            <h3>howdy, {{ user.username }}!</h3>
+        {% else %}
+            <h3>hey there partner!</h3>
+        {% endif %}
+    </div>
+    <div class="row marketing">
+        <div class="col-lg-6">
+            <h3>Most liked categories</h3>
+            <ul class="list-group">
+                {% for category in categories %}
+                    <li class="list-group-item"><a href="{% url 'show_category' category.slug %}">
+                        {{ category.name }}</a>: {{ category.likes }}
+                    </li>
+                {% empty %}
+                    <strong>There are no categories present.</strong>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-lg-6">
+            <h3>Most viewed pages</h3>
+            <ul class="list-group">
+                {% for viewed in most_viewed %}
+                    <li class="list-group-item"><a href="{% url 'show_category' viewed.category.slug %}">
+                        {{ viewed.category.name }}</a>: {{ viewed.title }} - {{ viewed.views }}
+                    </li>
+                {% empty %}
+                    <strong>There are no viewed pages present.</strong>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
     <div>
         <img src="{% static 'images/rango.jpg' %}"
              alt="Picture of Rango" />
