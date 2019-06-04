@@ -24,9 +24,16 @@ def index(request):
 def show_category(request, category_name_slug):
     context_dict = {}
     category = get_object_or_404(Category, slug=category_name_slug)
-    pages = Page.objects.filter(category=category)
+    pages = Page.objects.filter(category=category).order_by('-views')
     context_dict['pages'] = pages
     context_dict['category'] = category
+
+    context_dict['query'] = category.name
+    if request.method == 'POST':
+        query = request.POST['query'].strip()
+        result = Page.objects.filter(title__contains=query)
+        if query:
+            context_dict['result_list'] = result
 
     return render(request, 'rango/category.html', context_dict)
 
@@ -165,6 +172,17 @@ def get_server_side_cookie(request, cookie, default_val=None):
     if not val:
         val = default_val
     return val
+
+
+def track_url(request):
+    url = '/rango/'
+    if request.method == 'GET':
+        page_id = request.GET.get('page_id', None)
+        page = get_object_or_404(Page, id=page_id)
+        page.views += 1
+        page.save()
+        url = page.url
+        return redirect(url)
 
 
 # Create a new class that redirects the user to the index page,
