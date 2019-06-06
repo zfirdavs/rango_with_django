@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect, reverse
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from .models import Category, Page
+from .models import Category, Page, UserProfile
 from .forms import CategoryForm, PageForm, UserForm, UserProfileForm
 from datetime import datetime
 from registration.backends.simple.views import RegistrationView
@@ -185,8 +185,57 @@ def track_url(request):
         return redirect(url)
 
 
+@login_required
+def register_profile(request):
+    form = UserProfileForm()
+
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES)
+        if form.is_valid():
+            user_profile = form.save(commit=False)
+            user_profile.user = request.user
+            user_profile.save()
+            return redirect('index')
+        else:
+            print(form.errors)
+
+    return render(request, 'rango/profile_registration.html', {'form': form})
+
+
+@login_required
+def profile(request, username):
+    try:
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return redirect('index')
+
+    userprofile = UserProfile.objects.get_or_create(user=user)[0]
+    form = UserProfileForm(
+        {'website': userprofile.website, 'picture': userprofile.picture}
+    )
+
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=userprofile)
+        if form.is_valid():
+            form.save(commit=True)
+            return redirect('profile', user.username)
+        else:
+            print(form.errors)
+
+    return render(request, 'rango/profile.html', {
+        'userprofile': userprofile,
+        'selecteduser': user,
+        'form': form
+    })
+
+
+@login_required
+def list_profiles(request):
+    return render(request, 'rango/list_profiles.html',
+                  {'userprofile_list': UserProfile.objects.all()})
+
 # Create a new class that redirects the user to the index page,
 # if successful at logging
 class MyRegistrationView(RegistrationView):
     def get_success_url(self, user):
-        return reverse('index')
+        return reverse('register_profile')

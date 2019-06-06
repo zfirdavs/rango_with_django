@@ -8,7 +8,7 @@
     <div class="jumbotron">
         <h1 class="display-3">Rango says...</h1>
         {% if user.is_authenticated %}
-            <h3>howdy, {{ user.username }}!</h3>
+            <h3>howdy, <a href="{% url 'profile' user.username %}">{{ user.username }}!</a></h3>
         {% else %}
             <h3>hey there partner!</h3>
         {% endif %}

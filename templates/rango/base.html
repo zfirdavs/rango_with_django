@@ -39,11 +39,12 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="{% url 'index' %}">Home</a></li>
                     <li><a href="{% url 'about' %}">About</a></li>
                     {% if user.is_authenticated %}
                         <li><a href="{% url 'add_category' %}">Add a New Category</a></li>
                         <li><a href="{% url 'auth_logout' %}?next=/">Logout</a></li>
+                        <li><a href="{% url 'profile' user.username %}">Profile</a></li>
+                        <li><a href="{% url 'list_profiles' %}">List Profiles</a></li>
                         <li><a href="{% url 'auth_password_change' %}">Change password</a></li>
                     {% else %}
                         <li><a href="{% url 'auth_login' %}">Login</a></li>
