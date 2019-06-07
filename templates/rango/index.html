@@ -19,7 +19,7 @@
             <ul class="list-group">
                 {% for category in categories %}
                     <li class="list-group-item"><a href="{% url 'show_category' category.slug %}">
-                        {{ category.name }}</a>: {{ category.likes }}
+                        {{ category.name }}</a><span class="badge">{{ category.likes }}</span>
                     </li>
                 {% empty %}
                     <strong>There are no categories present.</strong>
@@ -31,7 +31,7 @@
             <ul class="list-group">
                 {% for viewed in most_viewed %}
                     <li class="list-group-item"><a href="{% url 'show_category' viewed.category.slug %}">
-                        {{ viewed.category.name }}</a>: {{ viewed.title }} - {{ viewed.views }}
+                        {{ viewed.category.name }}</a>: {{ viewed.title }}<span class="badge">{{ viewed.views }}</span>
                     </li>
                 {% empty %}
                     <strong>There are no viewed pages present.</strong>
