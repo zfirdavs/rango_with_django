@@ -1,2 +1,2 @@
 # rango_with_django
-Making the rango project from Tango with Django Book
+Making the rango project from https://www.tangowithdjango.com
