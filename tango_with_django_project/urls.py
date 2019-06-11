@@ -29,6 +29,7 @@ urlpatterns = [
         name='registration_register'),
     url(r'^accounts/', include('registration.backends.simple.urls')),
     url(r'^api/', include('api.urls')),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
