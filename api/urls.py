@@ -1,9 +1,14 @@
-from django.conf.urls import url
-from rest_framework.urlpatterns import format_suffix_patterns
-from .views import CategoryList, CategoryDetail, api_root
+from django.conf.urls import url, include
+from rest_framework.routers import DefaultRouter
+from rest_framework.schemas import get_schema_view
+from .views import CategoryViewSet
 
-urlpatterns = format_suffix_patterns([
-    url(r'^$', api_root, name='api_root'),
-    url(r'^categories/$', CategoryList.as_view(), name='category-list'),
-    url(r'^categories/(?P<pk>\d+)/$', CategoryDetail.as_view(), name='category-detail'),
-])
+router = DefaultRouter()
+router.register(r'categories', CategoryViewSet)
+
+schema_view = get_schema_view(title='Pastebin API')
+
+urlpatterns = [
+    url(r'^', include(router.urls)),
+    url(r'^schema/$', schema_view),
+]

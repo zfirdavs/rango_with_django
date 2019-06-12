@@ -1,27 +1,14 @@
 from rango.models import Category
 from .serializers import CategorySerializer
-from rest_framework import generics, permissions
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework.reverse import reverse
+from rest_framework import permissions, viewsets
 
 
-@api_view(['GET'])
-def api_root(request, format=None):
-    return Response({
-        'categories': reverse('category-list', request=request, format=format)
-    })
-
-
-class CategoryList(generics.ListCreateAPIView):
+class CategoryViewSet(viewsets.ModelViewSet):
+    """
+        This viewset automatically provides `list`, `create`, `retrieve`,
+        `update` and `destroy` actions.
+    """
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
-
-class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
-
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
