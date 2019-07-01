@@ -1,24 +1,35 @@
+from datetime import datetime
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.views.generic.list import ListView
+from django.views.generic import TemplateView
+from registration.backends.simple.views import RegistrationView
 from .models import Category, Page, UserProfile
 from .forms import CategoryForm, PageForm, UserForm, UserProfileForm
-from datetime import datetime
-from registration.backends.simple.views import RegistrationView
 
 
-def index(request):
-    request.session.set_test_cookie()
-    category_list = Category.objects.order_by('-likes')[:5]
-    viewed_pages = Page.objects.order_by('-views')[:5]
-    context_dict = {
-        'categories': category_list,
-        'most_viewed': viewed_pages,
-    }
-    visitor_cookie_handler(request)
-    context_dict['visits'] = request.session['visits']
-    return render(request, 'rango/index.html', context_dict)
+class IndexView(TemplateView):
+    template_name = 'rango/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.order_by('-likes')[:5]
+        context['most_viewed'] = Page.objects.order_by('-views')[:5]
+        return context
+
+
+# def index(request):
+#     category_list = Category.objects.order_by('-likes')[:5]
+#     viewed_pages = Page.objects.order_by('-views')[:5]
+#     context_dict = {
+#         'categories': category_list,
+#         'most_viewed': viewed_pages,
+#     }
+#     visitor_cookie_handler(request)
+#     context_dict['visits'] = request.session['visits']
+#     return render(request, 'rango/index.html', context_dict)
 
 
 def show_category(request, category_name_slug):
@@ -76,11 +87,6 @@ def about(request):
         'visits': request.session['visits']
     }
     return render(request, 'rango/about.html', context)
-
-
-@login_required
-def restricted(request):
-    return render(request, 'rango/restricted.html')
 
 
 def visitor_cookie_handler(request):
@@ -170,6 +176,7 @@ def profile(request, username):
 @login_required
 def like_category(request):
     likes = 0
+    cat_id = None
     if request.method == 'GET':
         cat_id = request.GET.get('category_id', None)
 

@@ -2,20 +2,22 @@
 {% block title %}Add a Page{% endblock %}
 {% block content %}
     {% if category %}
-        <form action="" id="page_form" method="post" role="form">
-            <h2 class="form-signin-heading">Add a Page to
-                <a href="{% url 'show_category' category.slug %}">{{ category.name }}</a>
-            </h2>
+        <h2>Add a Page to
+            <a href="{% url 'show_category' category.slug %}">{{ category.name }}</a>
+        </h2>
+        <form action="" id="page_form" method="post" role="form" class="form-horizontal">
             {% csrf_token %}
             {% for field in form.hidden_fields %}
                 {{ field }}
             {% endfor %}
             {% for field in form.visible_fields %}
-                {{ field.errors }}
-                {{ field.help_text }}<br>
-                {{ field }}<br>
+                <div class="form-group">
+                    {{ field.errors }}
+                    {{ field.help_text }}<br>
+                    {{ field.label_tag }}
+                    {{ field }}
+                </div>
             {% endfor %}
-            <br>
             <button class="btn btn-primary" type="submit" name="submit">
                 Add Page
             </button>
