@@ -3,7 +3,7 @@
 {% block content %}
     {% if category %}
         <h2>Add a Page to
-            <a href="{% url 'show_category' category.slug %}">{{ category.name }}</a>
+            <a href="{% url 'show_category' category.slug %}">{{ category.name }}</a> category
         </h2>
         <form action="" id="page_form" method="post" role="form" class="form-horizontal">
             {% csrf_token %}

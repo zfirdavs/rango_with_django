@@ -1,6 +1,8 @@
-from .models import Category, Page, UserProfile
-from django.contrib.auth.models import User
 from django import forms
+from django.contrib.auth.models import User
+from django.utils.text import slugify
+from django.core.exceptions import ValidationError
+from .models import Category, Page, UserProfile
 
 
 class CategoryForm(forms.ModelForm):
@@ -12,6 +14,14 @@ class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
         fields = ('name',)
+
+    def clean_name(self):
+        name = self.cleaned_data['name']
+        slug = slugify(name)
+
+        if Category.objects.filter(slug=slug).exists():
+            raise ValidationError('A category with this slug already exists.')
+        return slug
 
 
 class PageForm(forms.ModelForm):

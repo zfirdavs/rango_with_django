@@ -1,11 +1,17 @@
 from datetime import datetime
+
 from django.shortcuts import render, get_object_or_404, redirect, reverse
+from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.http import HttpResponse
-from django.views.generic.list import ListView
 from django.views.generic import TemplateView
+from django.views.generic.list import ListView
+from django.views.generic.edit import CreateView
+from django.contrib.messages.views import SuccessMessageMixin
 from registration.backends.simple.views import RegistrationView
+
 from .models import Category, Page, UserProfile
 from .forms import CategoryForm, PageForm, UserForm, UserProfileForm
 
@@ -20,23 +26,11 @@ class IndexView(TemplateView):
         return context
 
 
-# def index(request):
-#     category_list = Category.objects.order_by('-likes')[:5]
-#     viewed_pages = Page.objects.order_by('-views')[:5]
-#     context_dict = {
-#         'categories': category_list,
-#         'most_viewed': viewed_pages,
-#     }
-#     visitor_cookie_handler(request)
-#     context_dict['visits'] = request.session['visits']
-#     return render(request, 'rango/index.html', context_dict)
-
-
 def show_category(request, category_name_slug):
     context_dict = {}
     category = get_object_or_404(Category, slug=category_name_slug)
-    pages = Page.objects.filter(category=category).order_by('-views')
-    context_dict['pages'] = pages
+    # Using related query via related name model attribute
+    context_dict['pages'] = category.pages.order_by('-views')
     context_dict['category'] = category
 
     context_dict['query'] = category.name
@@ -49,6 +43,14 @@ def show_category(request, category_name_slug):
     return render(request, 'rango/category.html', context_dict)
 
 
+class CategoryAdd(SuccessMessageMixin, CreateView):
+    model = Category
+    form_class = CategoryForm
+    success_url = reverse_lazy('index')
+    template_name = 'rango/add_category.html'
+    success_message = 'The new category added successfully'
+
+
 @login_required
 def add_category(request):
     form = CategoryForm()
@@ -56,7 +58,7 @@ def add_category(request):
         form = CategoryForm(request.POST)
         if form.is_valid():
             form.save(commit=True)
-            return index(request)
+            return redirect('index')
         else:
             print(form.errors)
     return render(request, 'rango/add_category.html', {'form': form})
@@ -72,7 +74,6 @@ def add_page(request, category_name_slug):
             if category:
                 page = form.save(commit=False)
                 page.category = category
-                # page.views = 0
                 page.save()
                 return show_category(request, category_name_slug)
         else:

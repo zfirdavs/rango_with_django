@@ -51,8 +51,11 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a href="{% url 'profile' user.username %}">Profile</a></li>
-                                <li><a href="{% url 'auth_logout' %}?next=/">Logout</a></li>
+                                {% if user.is_superuser %}
+                                    <li><a href="{% url 'admin:index' %}">Admin Site</a></li>
+                                {% endif %}
                                 <li><a href="{% url 'auth_password_change' %}">Change password</a></li>
+                                <li><a href="{% url 'auth_logout' %}?next=/">Logout</a></li>
                             </ul>
                         </li>
                     {% else %}
@@ -68,13 +71,13 @@
         <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
                 <ul class="nav nav-pills flex-column">
-                    <li>Type to find a category</li>
-                    <form>
-                        <li>
+                    <li>Type to find a category: </li>
+                    <li>
+                        <form>
                             <input type="text" class="search-query form-control"
                                    name="suggestion" id="suggestion" value=""/>
-                        </li>
-                    </form>
+                        </form>
+                    </li>
                 </ul>
                 <hr/>
             <div id="cats"></div>

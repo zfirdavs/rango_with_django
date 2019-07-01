@@ -1,0 +1,23 @@
+{% csrf_token %}
+{% for field in form.hidden_fields %}
+    {{ field }}
+{% endfor %}
+{% for field in form.visible_fields %}
+    {% ifequal field.name 'honeypot' %}
+        <div class="honeypot">{{ field }}</div>
+    {% else %}
+        <div class="form-field">
+            {% if field.errors %}
+                <div class="error-list">
+                    {% for error in field.errors %}
+                        <p class="error-description"><strong>{{ error }}</strong></p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% if field.help_text %}
+                <div>{{ field.help_text }}</div>
+            {% endif %}
+            <p>{{ field.label_tag }} {{ field }}</p>
+        </div>
+    {% endifequal %}
+{% endfor %}

@@ -1,0 +1,13 @@
+@charset "utf-8";
+#messages-list {
+    background-color: #eeeeee;
+    padding: 5px;
+}
+
+#messages-list .ERROR {
+    color: #ff0000;
+}
+
+.honeypot {
+    display: none;
+}

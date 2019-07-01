@@ -5,9 +5,8 @@
     <div>
         <form action="" id="category_form" method="post" role="form">
             <h2 class="form-signin-heading">Add a new Category</h2>
-            {% csrf_token %}
-            {{ form }}
-            <br>
+            <hr>
+            {% include 'generic/form.html' %}
             <button class="btn btn-primary" type="submit" name="submit">
                 Create Category
             </button>

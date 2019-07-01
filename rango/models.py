@@ -1,5 +1,4 @@
 from django.db import models
-from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
 
 
@@ -12,16 +11,12 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
-        super().save(*args, **kwargs)
-
     class Meta:
         verbose_name_plural = 'Categories'
 
 
 class Page(models.Model):
-    category = models.ForeignKey(Category, related_name='categories')
+    category = models.ForeignKey(Category, related_name='pages')
     title = models.CharField(max_length=128)
     url = models.URLField()
     views = models.IntegerField(default=0)
