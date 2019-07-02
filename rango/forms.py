@@ -20,8 +20,8 @@ class CategoryForm(forms.ModelForm):
         slug = slugify(name)
 
         if Category.objects.filter(slug=slug).exists():
-            raise ValidationError('A category with this slug already exists.')
-        return slug
+            raise ValidationError(f'A category with {slug} slug already exists.')
+        return name
 
 
 class PageForm(forms.ModelForm):

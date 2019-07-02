@@ -1,15 +1,16 @@
 from datetime import datetime
-
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.utils.text import slugify
 from django.http import HttpResponse
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from registration.backends.simple.views import RegistrationView
 
 from .models import Category, Page, UserProfile
@@ -27,13 +28,13 @@ class IndexView(TemplateView):
 
 
 def show_category(request, category_name_slug):
-    context_dict = {}
     category = get_object_or_404(Category, slug=category_name_slug)
-    # Using related query via related name model attribute
-    context_dict['pages'] = category.pages.order_by('-views')
-    context_dict['category'] = category
+    context_dict = {
+        'pages': category.pages.order_by('-views'),  # Using related query via related name model attribute
+        'category': category,
+        'query': category.name
+    }
 
-    context_dict['query'] = category.name
     if request.method == 'POST':
         query = request.POST['query'].strip()
         result = Page.objects.filter(title__contains=query)
@@ -43,25 +44,16 @@ def show_category(request, category_name_slug):
     return render(request, 'rango/category.html', context_dict)
 
 
-class CategoryAdd(SuccessMessageMixin, CreateView):
+class CategoryAdd(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Category
     form_class = CategoryForm
     success_url = reverse_lazy('index')
     template_name = 'rango/add_category.html'
     success_message = 'The new category added successfully'
 
-
-@login_required
-def add_category(request):
-    form = CategoryForm()
-    if request.method == 'POST':
-        form = CategoryForm(request.POST)
-        if form.is_valid():
-            form.save(commit=True)
-            return redirect('index')
-        else:
-            print(form.errors)
-    return render(request, 'rango/add_category.html', {'form': form})
+    def form_valid(self, form):
+        form.instance.slug = slugify(form.cleaned_data['name'])
+        return super(CategoryAdd, self).form_valid(form)
 
 
 @login_required

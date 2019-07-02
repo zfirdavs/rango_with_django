@@ -6,7 +6,7 @@ urlpatterns = [
     url(r'about/$', views.about, name='about'),
     url(r'category/(?P<category_name_slug>[\w\-]+)/$',
         views.show_category, name='show_category'),
-    url(r'^add_category/$', login_required(views.CategoryAdd.as_view()), name='add_category'),
+    url(r'^add_category/$', views.CategoryAdd.as_view(), name='add_category'),
     url(r'^category/(?P<category_name_slug>[\w\-]+)/add/$',
         views.add_page, name='add_page'),
     url(r'^goto/$', views.track_url, name='goto'),
