@@ -3,7 +3,6 @@ from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 from django.utils.text import slugify
 from django.http import HttpResponse
 from django.views.generic import TemplateView
@@ -14,7 +13,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from registration.backends.simple.views import RegistrationView
 
 from .models import Category, Page, UserProfile
-from .forms import CategoryForm, PageForm, UserForm, UserProfileForm
+from .forms import CategoryForm, PageForm, UserProfileForm
 
 
 class IndexView(TemplateView):
@@ -205,10 +204,11 @@ def suggest_category(request):
     return render(request, 'rango/cats.html', {'cats': cat_list})
 
 
-@login_required
-def list_profiles(request):
-    return render(request, 'rango/list_profiles.html',
-                  {'userprofile_list': UserProfile.objects.all()})
+class ProfilesList(LoginRequiredMixin, ListView):
+    queryset = UserProfile.objects.order_by('id')
+    context_object_name = 'user_profile_list'
+    template_name = 'rango/list_profiles.html'
+    paginate_by = 2
 
 
 # Create a new class that redirects the user to the index page,

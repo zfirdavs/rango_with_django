@@ -1,5 +1,4 @@
 from django.conf.urls import url
-from django.contrib.auth.decorators import login_required
 from rango import views
 
 urlpatterns = [
@@ -12,7 +11,7 @@ urlpatterns = [
     url(r'^goto/$', views.track_url, name='goto'),
     url(r'^register_profile/$', views.register_profile, name='register_profile'),
     url(r'^profile/(?P<username>[\w\-]+)/$', views.profile, name='profile'),
-    url(r'^profiles/$', views.list_profiles, name='list_profiles'),
+    url(r'^profiles/$', views.ProfilesList.as_view(), name='list_profiles'),
     url(r'^like/$', views.like_category, name='like_category'),
     url(r'^suggest/$', views.suggest_category, name='suggest_category'),
 ]

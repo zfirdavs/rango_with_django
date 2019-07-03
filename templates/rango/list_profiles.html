@@ -4,16 +4,16 @@
 {% block content %}
     <h1>User Profiles</h1>
     <div class="panel">
-        {% if userprofile_list %}
+        {% if user_profile_list %}
             <div class="panel-heading">
                 <!-- Display search results in an ordered list -->
                 <div class="panel-body">
                     <div class="list-group">
-                        {% for userprofile in userprofile_list %}
+                        {% for user_profile in user_profile_list %}
                             <div class="list-group-item">
                                 <span>
-                                    {% if userprofile.picture %}
-                                        <img src="{{ MEDIA_URL }}{{ userprofile.picture }}"
+                                    {% if user_profile.picture %}
+                                        <img src="{{ MEDIA_URL }}{{ user_profile.picture }}"
                                              alt="" width="64" height="64">
                                     {% else %}
                                         <img src="http://lorempixel.com/300/300/people/"
@@ -21,12 +21,13 @@
                                     {% endif %}
                                 </span>
                                 <h4 class="list-group-item-heading">
-                                    <a href="{% url 'profile' userprofile.user.username %}">
-                                        {{ userprofile.user.username }}
+                                    <a href="{% url 'profile' user_profile.user.username %}">
+                                        {{ user_profile.user.username }}
                                     </a>
                                 </h4>
                             </div>
                         {% endfor %}
+                        {% include 'generic/pagination.html' %}
                     </div>
                 </div>
             </div>

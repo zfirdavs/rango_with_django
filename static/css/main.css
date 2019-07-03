@@ -14,3 +14,9 @@
 .honeypot {
     display: none;
 }
+
+.jumbotron {
+    background-image: url("/static/images/rango.jpg");
+    background-size: cover;
+    height: 100%;
+}
