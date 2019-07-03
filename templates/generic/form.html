@@ -3,21 +3,28 @@
     {{ field }}
 {% endfor %}
 {% for field in form.visible_fields %}
-    {% ifequal field.name 'honeypot' %}
+    {% if field.name == 'honeypot' %}
         <div class="honeypot">{{ field }}</div>
     {% else %}
-        <div class="form-field">
+        <div class="form-group">
             {% if field.errors %}
                 <div class="error-list">
                     {% for error in field.errors %}
-                        <p class="error-description"><strong>{{ error }}</strong></p>
+                        <p class="error-description">
+                            <strong>{{ error }}</strong>
+                        </p>
                     {% endfor %}
                 </div>
             {% endif %}
             {% if field.help_text %}
-                <div>{{ field.help_text }}</div>
+                <p class="help-block">{{ field.help_text }}</p>
             {% endif %}
-            <p>{{ field.label_tag }} {{ field }}</p>
+            <label for="id_{{ field.name }}" class="control-label col-sm-1">
+                {{ field.label }}
+            </label>
+            <div class="col-sm-11">
+                {{ field }}
+            </div>
         </div>
-    {% endifequal %}
+    {% endif %}
 {% endfor %}

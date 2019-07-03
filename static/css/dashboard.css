@@ -108,3 +108,15 @@ body {
     display: inline-block;
     border-radius: 50%;
 }
+
+#id_name.form-control {
+    width: 50%;
+}
+
+.help-block {
+    margin-left: 125px;
+}
+
+.form-horizontal .form-group {
+    margin-right: 200px;
+}

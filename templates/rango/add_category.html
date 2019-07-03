@@ -3,13 +3,17 @@
 {% block title %}Add a Category{% endblock %}
 {% block content %}
     <div>
-        <form action="" id="category_form" method="post" role="form">
+        <form action="" id="category_form" method="post" role="form" class="form-horizontal">
             <h2 class="form-signin-heading">Add a new Category</h2>
             <hr>
             {% include 'generic/form.html' %}
-            <button class="btn btn-primary" type="submit" name="submit">
-                Create Category
-            </button>
+            <div class="form-group">
+                <div class="col-sm-offset-1 col-sm-11">
+                    <button class="btn btn-primary" type="submit" name="submit">
+                        Create Category
+                    </button>
+                </div>
+            </div>
         </form>
     </div>
 {% endblock %}

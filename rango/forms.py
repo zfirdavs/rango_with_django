@@ -1,12 +1,15 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.utils.text import slugify
 from django.core.exceptions import ValidationError
+from django.utils.text import slugify
+
 from .models import Category, Page, UserProfile
 
 
 class CategoryForm(forms.ModelForm):
-    name = forms.CharField(help_text='Please enter the category name.')
+    name = forms.CharField(help_text='Please enter the category name.',
+                           widget=forms.TextInput(
+                               attrs={'class': 'form-control'}))
     views = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
     likes = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
