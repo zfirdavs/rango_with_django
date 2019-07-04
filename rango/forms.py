@@ -33,9 +33,14 @@ class PageForm(forms.ModelForm):
                          help_text='Please enter the URL of the page.')
     views = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
 
+    def __init__(self, *args, **kwargs):
+        super(PageForm, self).__init__(*args, **kwargs)
+        self.fields['title'].widget.attrs.update({'class': 'form-control'})
+        self.fields['url'].widget.attrs.update({'class': 'form-control'})
+
     class Meta:
         model = Page
-        exclude = ('category',)
+        fields = ('title', 'url')
 
     def clean(self):
         cleaned_data = self.cleaned_data

@@ -113,6 +113,13 @@ body {
     width: 50%;
 }
 
+#id_title.form-control {
+    width: 50%;
+}
+
+#id_url.form-control {
+    width: 65%;
+}
 .help-block {
     margin-left: 125px;
 }

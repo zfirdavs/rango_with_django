@@ -55,59 +55,28 @@ class CategoryAdd(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         return super(CategoryAdd, self).form_valid(form)
 
 
-@login_required
-def add_page(request, category_name_slug):
-    category = get_object_or_404(Category, slug=category_name_slug)
-    form = PageForm()
-    if request.method == 'POST':
-        form = PageForm(request.POST)
-        if form.is_valid():
-            if category:
-                page = form.save(commit=False)
-                page.category = category
-                page.save()
-                return show_category(request, category_name_slug)
-        else:
-            print(form.errors)
-    context_dict = {'form': form, 'category': category}
-    return render(request, 'rango/add_page.html', context_dict)
+class PageAdd(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    model = Page
+    form_class = PageForm
+    slug_url_kwarg = 'category_name_slug'
+    template_name = 'rango/add_page.html'
+    success_message = 'The new page has been added'
 
+    def get_context_data(self, **kwargs):
+        context = super(PageAdd, self).get_context_data(**kwargs)
+        context['category'] = self.get_related_category()
+        return context
 
-def about(request):
-    visitor_cookie_handler(request)
-    context = {
-        'visits': request.session['visits']
-    }
-    return render(request, 'rango/about.html', context)
+    def get_success_url(self):
+        cat_name_slug = self.kwargs['category_name_slug']
+        return reverse_lazy('show_category', args=[cat_name_slug])
 
+    def get_related_category(self):
+        return get_object_or_404(Category, slug=self.kwargs['category_name_slug'])
 
-def visitor_cookie_handler(request):
-    visits = int(get_server_side_cookie(request, 'visits', '1'))
-    last_visit_cookie = get_server_side_cookie(request,
-                                               'last_visit',
-                                               str(datetime.now()))
-    last_visit_time = datetime.strptime(last_visit_cookie[:-7],
-                                        '%Y-%m-%d %H:%M:%S')
-
-    # If it's been more than a day since the last visit...
-    if (datetime.now() - last_visit_time).days > 0:
-        visits += 1
-        # update the last visit cookie now that we have updated the count
-        request.session['last_visit'] = str(datetime.now())
-    else:
-        visits = 1
-        # set the last visit cookie
-        request.session['last_visit'] = last_visit_cookie
-
-    # Update/set the visits cookie
-    request.session['visits'] = visits
-
-
-def get_server_side_cookie(request, cookie, default_val=None):
-    val = request.session.get(cookie)
-    if not val:
-        val = default_val
-    return val
+    def form_valid(self, form):
+        form.instance.category = self.get_related_category()
+        return super(PageAdd, self).form_valid(form)
 
 
 def track_url(request):
