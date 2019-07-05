@@ -7,10 +7,16 @@
             <div class="well well-lg">
                 <div class="row">
                     <div class="col-sm-6 col-md-4">
-                        <img src="http://lorempixel.com/380/500/people/" alt="" class="img-rounded img-responsive">
+                        {% if userprofile.picture %}
+                            <img src="{{ MEDIA_URL }}{{ userprofile.picture }}"
+                                 alt="{{ selecteduser.username }}" width="300" height="300">
+                        {% else %}
+                            <img src="http://lorempixel.com/380/500/people/"
+                                 alt="Random" class="img-rounded img-responsive">
+                        {% endif %}
                     </div>
                     <div class="col-sm-6 col-md-8">
-                        <h4>Some Name</h4>
+                        <h2>{{ selecteduser.username }} Profile</h2>
                         <small>
                             <cite title="Tashkent, Uzbekistan">
                                 Tashkent, Uzbekistan
@@ -19,10 +25,10 @@
                         </small>
                         <p>
                             <i class="glyphicon glyphicon-envelope"></i>
-                            email@example.com
+                            {{ user.email }}
                             <br>
                             <i class="glyphicon glyphicon-globe"></i>
-                            <a href="#">google.com</a>
+                            <a href="{{ userprofile.website }}">{{ userprofile.website }}</a>
                             <br>
                             <i class="glyphicon glyphicon-gift"></i>
                             June 2, 1988
@@ -53,32 +59,29 @@
                                 </li>
                             </ul>
                         </div>
+                        {% if selecteduser.username == user.username %}
+                            <p>
+                                <br>
+                                <button class="btn btn-primary">Change</button>
+                            </p>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <h1>{{ selecteduser.username }} Profile</h1>
-    {% if userprofile.picture %}
-        <img src="{{ MEDIA_URL }}{{ userprofile.picture }}"
-             alt="{{ selecteduser.username }}" width="300" height="300">
-    {% else %}
-        <img src="http://lorempixel.com/300/300/people/" alt="Random">
-    {% endif %}
     <br>
     <div>
         <br>
-        {% if selecteduser.username == user.username %}
-            <form action="" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <input type="submit" value="Update">
-            </form>
-        {% else %}
-            <p><strong>Website: </strong> <a href="{{ userprofile.website }}">
-                {{ userprofile.website }}
-            </a></p>
-        {% endif %}
+{#        {% if selecteduser.username == user.username %}#}
+{#            <form action="" method="post" enctype="multipart/form-data">#}
+{#                {% include 'generic/form.html' with btn_name='Update' %}#}
+{#            </form>#}
+{#        {% else %}#}
+{#            <p><strong>Website: </strong> <a href="{{ userprofile.website }}">#}
+{#                {{ userprofile.website }}#}
+{#            </a></p>#}
+{#        {% endif %}#}
     </div>
     <div id="edit_profile"></div>
 {% endblock %}
