@@ -55,6 +55,10 @@ def populate():
         "Php": {"pages": [], "views": 32, "likes": 16},
         "Prolog": {"pages": [], "views": 32, "likes": 16},
         "Programming": {"pages": [], "views": 32, "likes": 16},
+        "Ruby": {"pages": [], "views": 32, "likes": 32},
+        "Java": {"pages": [], "views": 23, "likes": 25},
+        "Kotlin": {"pages": [], "views": 12, "likes": 11},
+        "Rust": {"pages": [], "views": 13, "likes": 21},
     }
 
     for cat, cat_data in cats.items():
