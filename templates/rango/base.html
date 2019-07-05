@@ -40,6 +40,7 @@
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
                     {% if user.is_authenticated %}
+                        <li><a href="{% url 'category_list' %}">All categories</a></li>
                         <li><a href="{% url 'add_category' %}">Add a New Category</a></li>
                         <li><a href="{% url 'list_profiles' %}">List Profiles</a></li>
                         <li><a href="{% url 'api-root' %}" target="_blank">API</a></li>
@@ -51,7 +52,7 @@
                             <ul class="dropdown-menu">
                                 <li><a href="{% url 'profile' user.username %}">Profile</a></li>
                                 {% if user.is_superuser %}
-                                    <li><a href="{% url 'admin:index' %}">Admin Site</a></li>
+                                    <li><a href="{% url 'admin:index' %}" target="_blank">Admin Site</a></li>
                                 {% endif %}
                                 <li><a href="{% url 'auth_password_change' %}">Change password</a></li>
                                 <li><a href="{% url 'auth_logout' %}?next=/">Logout</a></li>

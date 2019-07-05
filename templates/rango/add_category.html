@@ -3,9 +3,10 @@
 {% block title %}Add a Category{% endblock %}
 {% block content %}
     <div>
+        <div class="page-header">
+            <h2>Add a New Category</h2>
+        </div>
         <form action="" id="category_form" method="post" role="form" class="form-horizontal">
-            <h2 class="form-signin-heading">Add a new Category</h2>
-            <hr>
             {% include 'generic/form.html' with btn_name='Add category' %}
         </form>
     </div>

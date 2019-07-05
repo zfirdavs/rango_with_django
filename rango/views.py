@@ -43,6 +43,13 @@ def show_category(request, category_name_slug):
     return render(request, 'rango/category.html', context_dict)
 
 
+class CategoryList(ListView):
+    queryset = Category.objects.order_by('name')
+    template_name = 'rango/category_list.html'
+    paginate_by = 10
+    context_object_name = 'category_list'
+
+
 class CategoryAdd(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Category
     form_class = CategoryForm

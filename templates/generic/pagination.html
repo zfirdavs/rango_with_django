@@ -1,14 +1,14 @@
 {% load rango_template_tags %}
-<div class="pagination">
-    <span class="step-links">
+<nav aria-label="...">
+    <ul class="pager">
         {% if page_obj.has_previous %}
-            <a href="{% url_params page=page_obj.previous_page_number %}">previous</a>
+            <li><a href="{% url_params page=page_obj.previous_page_number %}">previous</a></li>
         {% endif %}
         <span class="current">
             Page {{ page_obj.number }} of {{ paginator.num_pages }}
         </span>
         {% if page_obj.has_next %}
-            <a href="{% url_params page=page_obj.next_page_number %}">next</a>
+            <li><a href="{% url_params page=page_obj.next_page_number %}">next</a></li>
         {% endif %}
-    </span>
-</div>
+    </ul>
+</nav>

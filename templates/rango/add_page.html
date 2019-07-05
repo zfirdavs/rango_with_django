@@ -2,10 +2,12 @@
 {% block title %}Add a Page{% endblock %}
 {% block content %}
     {% if category %}
-        <h2>Add a Page to
-            <a href="{% url 'show_category' category.slug %}">{{ category.name }}</a> category
-        </h2>
-        <hr>
+        <div class="page-header">
+            <h2>Add a Page to
+                <a href="{% url 'show_category' category.slug %}">
+                    {{ category.name }}</a> category
+            </h2>
+        </div>
         <form action="" id="page_form" method="post" role="form" class="form-horizontal">
             {% include 'generic/form.html' with btn_name='Add Page' %}
         </form>
