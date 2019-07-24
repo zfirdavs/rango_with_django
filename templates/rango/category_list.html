@@ -8,9 +8,12 @@
     </div>
     <ul class="list-group">
         {% for category in category_list %}
-            <li class="list-group-item"><a href="{% url 'show_category' category.slug %}">
-                {{ category.name }}</a><span class="badge">{{ category.likes }} likes</span>
-            </li>
+            {% if category.slug %}
+                <li class="list-group-item">
+                    <a href="{% url 'show_category' category.slug %}">{{ category.name }}</a>
+                    <span class="badge">{{ category.likes }} likes</span>
+                </li>
+            {% endif %}
         {% empty %}
             <strong>There are no categories present.</strong>
         {% endfor %}

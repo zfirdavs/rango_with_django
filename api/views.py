@@ -1,6 +1,7 @@
+from rest_framework import permissions, viewsets
+from rest_framework.decorators import action
 from rango.models import Category, Page
 from .serializers import CategorySerializer, PageSerializer
-from rest_framework import permissions, viewsets
 
 
 class CategoryViewSet(viewsets.ModelViewSet):

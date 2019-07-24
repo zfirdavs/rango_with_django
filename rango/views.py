@@ -95,6 +95,9 @@ def track_url(request):
         page.save()
         url = page.url
         return redirect(url)
+    if request.is_ajax():
+        page_id = request.GET.get('page_id')
+        return HttpResponse(page_id)
 
 
 @login_required

@@ -1,4 +1,5 @@
 {% extends 'rango/base.html' %}
+{% load rango_template_tags %}
 {% block title %}
     {{ category.name }}
 {% endblock %}
@@ -20,7 +21,10 @@
             <ul class="list-group">
                 {% for page in pages %}
                     <li class="list-group-item">
-                        <a href="{% url 'goto' %}?page_id={{ page.id }}" target="_blank">{{ page.title }}</a>
+                        <a href="{% url 'goto' %}{% url_params page_id=page.id %}"
+                           target="_blank">
+                            {{ page.title }}
+                        </a>
                         {% if page.views > 1 %}
                             <span class="badge">{{ page.views }} views</span>
                         {% else %}
