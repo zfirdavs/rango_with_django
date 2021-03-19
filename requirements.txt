@@ -9,7 +9,7 @@ Django==1.11.29
 django-bootstrap-toolkit==2.15.0
 django-environ==0.4.5
 django-registration-redux==1.4
-djangorestframework==3.9.4
+djangorestframework==3.11.2
 idna==2.8
 itypes==1.1.0
 Jinja2==2.10.1
