@@ -14,7 +14,7 @@ idna==2.8
 itypes==1.1.0
 Jinja2==2.10.1
 MarkupSafe==1.1.1
-Pillow==7.1.1
+Pillow==9.3.0
 pytz==2019.1
 PyYAML==5.1.1
 requests==2.22.0
